@@ -3,6 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 
 const authenticate = require('../auth/authenticate-middleware.js');
+const usersRouter = require('../users/users-router')
 const authRouter = require('../auth/auth-router.js');
 const jokesRouter = require('../jokes/jokes-router.js');
 
@@ -12,7 +13,12 @@ server.use(helmet());
 server.use(cors());
 server.use(express.json());
 
+server.use('/api/users', authenticate, usersRouter)
 server.use('/api/auth', authRouter);
 server.use('/api/jokes', authenticate, jokesRouter);
+
+server.get("/", (req, res) => {
+    res.json({ message: "Server is up from server.js!" });
+  });
 
 module.exports = server;
